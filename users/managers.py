@@ -8,7 +8,7 @@ class UserManager(BaseUserManager):
 
     use_in_migrations = True
 
-    def create_user(self, email, first_name, last_name, mobile_number, password, **extra_fields):
+    def create_user(self, email, password, first_name, last_name, mobile_number, **extra_fields):
         """Create and save user with given email and password."""
         fields_names = ["email", "first_name", "last_name", "mobile_number"]
         values = [email, first_name, last_name, mobile_number]
@@ -30,4 +30,4 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
 
-        return self.create_user(email, password, **extra_fields)
+        return self.create_user(email, password, first_name='admin', last_name="admin", mobile_number="000", **extra_fields)
