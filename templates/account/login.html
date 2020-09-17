@@ -1,0 +1,21 @@
+<!-- templates/account/login.html -->
+{% extends "_base.html" %}
+
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+Log In
+{% endblock title %}
+
+{% block content %}
+<h2>Log In</h2>
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <div class="row justify-content-between">
+        <button class=" col-1 btn btn-success" type="submit">Log In</button>
+        <a class="button secondaryAction" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
+    </div>
+</form>
+{% endblock content %}
