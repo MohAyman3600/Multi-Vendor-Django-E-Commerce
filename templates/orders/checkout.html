@@ -1,0 +1,205 @@
+<!--templates/orders/checkout.html-->
+
+{% extends '_base.html' %}
+
+{% load static %}
+
+{% block content %}
+<div class="breadcrumb-area pt-205 pb-210" style="background-image: url(assets/img/bg/breadcrumb.jpg)">
+    <div class="container">
+        <div class="breadcrumb-content">
+            <h2>checkout</h2>
+            <ul>
+                <li><a href="#">home</a></li>
+                <li> checkout </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- checkout-area start -->
+<div class="checkout-area ptb-100">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="coupon-accordion">
+                    {% if not user.is_authenticated %}
+                    <!-- ACCORDION START -->
+                    <h3>Returning customer? <span id="showlogin">Click here to login</span></h3>
+                    <div id="checkout-login" class="coupon-content">
+                        <div class="coupon-info">
+                            <p class="coupon-text">Quisque gravida turpis sit amet nulla posuere lacinia. Cras sed est
+                                sit amet ipsum luctus.</p>
+                            <form method="post">
+                                {% csrf_token %}
+                                {{ forms.login.as_p }}
+                                <p class="form-row mt-3 ml-1">
+                                    <input type="submit" value="Login" />
+                                </p>
+                            </form>
+                            <p class="lost-password">
+                                <a href="{% url 'users:password_reset' %}">Lost your password?</a>
+                            </p>
+                        </div>
+                    </div>
+                    <!-- ACCORDION END -->
+                    {% endif %}
+                    <!-- ACCORDION START -->
+                    <h3>Have a coupon? <span id="showcoupon">Click here to enter your code</span></h3>
+                    <div id="checkout_coupon" class="coupon-checkout-content">
+                        <div class="coupon-info">
+                            <form action="#">
+                                <p class="checkout-coupon">
+                                    <input type="text" placeholder="Coupon code" />
+                                    <input type="submit" value="Apply Coupon" />
+                                </p>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- ACCORDION END -->
+                </div>
+            </div>
+        </div>
+        <script src="https://js.stripe.com/v3/"></script>
+        <!-- Section to display when at least one connected account has charges enabled -->
+        <form id="payment-form" class="sr-payment-form" method="post">
+            <div class="row">
+                <div class="col-lg-6 col-md-12 col-12">
+                    {% csrf_token %}
+                    <div class="checkbox-form">
+                        <h3>Billing Details</h3>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="checkout-form-list">
+                                    <label>Country <span class="required">*</span></label>
+                                    {{ forms.checkout.country }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="checkout-form-list">
+                                    <label>First Name <span class="required">*</span></label>
+                                    {{ forms.checkout.first_name }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="checkout-form-list">
+                                    <label>Last Name <span class="required">*</span></label>
+                                    {{ forms.checkout.last_name }}
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="checkout-form-list">
+                                    <label>Address <span class="required">*</span></label>
+                                    {{ forms.checkout.address }}
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="checkout-form-list">
+                                    <label>Town / City <span class="required">*</span></label>
+                                    {{ forms.checkout.city  }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="checkout-form-list">
+                                    <label>Postcode / Zip <span class="required">*</span></label>
+                                    {{ forms.checkout.postcode  }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="checkout-form-list">
+                                    <label>Email Address <span class="required">*</span></label>
+                                    {{ forms.checkout.email }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="checkout-form-list">
+                                    <label>Phone <span class="required">*</span></label>
+                                    {{ forms.checkout.phone }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="different-address">
+                            <div class="order-notes">
+                                <div class="checkout-form-list mrg-nn">
+                                    <label>Order Notes</label>
+                                    {{ forms.checkout.order_notes }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12 col-12">
+                    <div class="your-order">
+                        <h3>Your order</h3>
+                        <div class="your-order-table table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th class="product-name">Product</th>
+                                        <th class="product-total">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in cart %}
+                                    <tr class="cart_item">
+                                        {% with item.product as product %}
+                                        <td class="product-name">
+                                            {{product.title}} <strong class="product-quantity"> ×
+                                                {{item.quantity}}</strong>
+                                        </td>
+                                        {% endwith %}
+                                        <td class="product-total">
+                                            <span class="amount">£{{item.total_price}}</span>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                                <tfoot>
+                                    <tr class="cart-subtotal">
+                                        <th>Cart Subtotal</th>
+                                        <td><span class="amount">£{{cart.get_total_price}}</span></td>
+                                    </tr>
+                                    <tr class="order-total">
+                                        <th>Order Total</th>
+                                        <td><strong><span class="amount">£{{cart.get_total_price}}</span></strong>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <div class="payment-method">
+                            <div class="payment-accordion">
+                                <div class="panel-group" id="faq">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h5 class="panel-title"><a data-toggle="collapse" aria-expanded="true"
+                                                    data-parent="#faq" href="#payment-1">Credit or Debit Card</a></h5>
+                                        </div>
+                                        <div id="payment-1" class="panel-collapse collapse show">
+                                            <div class="panel-body">
+                                                <div class="sr-form-row">
+                                                    <label for="card-element">Enter your card
+                                                        details</label>
+                                                    <div class="sr-input sr-card-element" id="card-element">
+                                                    </div>
+                                                </div>
+                                                <div class="sr-form-row">
+                                                    <div class="sr-field-error" id="card-errors" role="alert"></div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="order-button-payment">
+                                    <input type="submit" value="Place order" form="payment-form" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- checkout-area end -->
+{% endblock content %}

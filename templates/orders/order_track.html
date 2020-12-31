@@ -1,0 +1,46 @@
+<!-- templates/order_confirmed.html -->
+{% extends "_base.html" %}
+
+{% load static %}
+
+{% block title %}
+Order Confirmed
+{% endblock title %}
+
+{% block content %}
+
+<h3 class="text-center">{% autoescape off %} Track Your Order {% endautoescape %}</h3>
+
+<div class="container">
+    <br />
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-10 col-lg-8">
+            {% if Founded == 'True' %}
+            <p class="text-left text-red font-weight-bold">{% autoescape off %} Please, enter valid tracking code
+                {% endautoescape %}</p>
+            {% endif %}
+            <form class="card card-sm" method="post">
+                {% csrf_token %}
+                <div class="card-body row no-gutters align-items-center">
+                    <div class="col-auto">
+                        <i class="fas fa-search h4 text-body"></i>
+                    </div>
+                    <!--end of col-->
+                    <div class="col">
+                        <input class="form-control form-control-lg form-control-borderless" type="search"
+                            name="tracking_code" placeholder="Enter Tracking Code">
+                    </div>
+                    <!--end of col-->
+                    <div class="col-auto ml-2">
+                        <button class="btn btn-lg btn-success" type="submit">Track Order</button>
+                    </div>
+                    <!--end of col-->
+                </div>
+            </form>
+        </div>
+        <!--end of col-->
+    </div>
+</div>
+
+
+{% endblock content %}

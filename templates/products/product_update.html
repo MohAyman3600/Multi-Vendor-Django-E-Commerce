@@ -1,47 +1,40 @@
-<!-- templates/account/signup.html -->
-
+<!-- templates/account/login.html -->
 {% extends "_base.html" %}
 
+{% load static %}
+{% load i18n %}
+
 {% block title %}
-SignUp
+Edit Product {{product.title}}
 {% endblock title %}
 
-
 {% block content %}
-<div class="breadcrumb-area pt-205 pb-210" style="background-image: url(assets/img/bg/breadcrumb.jpg)">
+<div class="breadcrumb-area pt-205 pb-210" style="background-image: url({% static 'img/bg/breadcrumb.jpg' %})">
     <div class="container">
         <div class="breadcrumb-content">
-            {% if request.GET.user_type == 'vendor' %}
-            <h2>Sign Up as a Vendor</h2>
-            {% elif request.GET.user_type == 'customer' %}
-            <h2>Sign Up as a Customer</h2>
-            {% else %}
-            <h2>Sign Up</h2>
-            {% endif %}
-
+            <h2>Edit {{product.title}}</h2>
             <ul>
                 <li><a href="#">home</a></li>
-                <li> register </li>
+                <li> Edit product </li>
             </ul>
         </div>
     </div>
 </div>
-<!-- register-area start -->
+<!-- login-area start -->
 <div class="register-area ptb-100">
-    <div class="container-fluid">
+    <div class="container">
         <div class="row">
             <div class="col-md-12 col-12 col-lg-6 col-xl-6 ml-auto mr-auto">
                 <div class="login">
                     <div class="login-form-container">
                         <div class="login-form">
-                            <form action="#" method="post">
+                            <form action="#" method="post" enctype="multipart/form-data">
                                 {% csrf_token %}
-                                {{ forms.customer }}
-                                {{ forms.vendor }}
+                                {{ form.as_p }}
+                                {{album_form.as_p}}
                                 <input type="hidden" name="next" value="{{ request.GET.next }}">
-                                <input type="hidden" name="user_type" value="{{ request.GET.user_type }}">
                                 <div class="button-box">
-                                    <button type="submit" class="default-btn floatright">Register</button>
+                                    <button type="submit" class="default-btn floatright">Update Product</button>
                                 </div>
                             </form>
                         </div>
@@ -51,5 +44,4 @@ SignUp
         </div>
     </div>
 </div>
-<!-- register-area end -->
 {% endblock content %}

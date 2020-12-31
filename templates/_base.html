@@ -1,56 +1,255 @@
+<!-- templates/_base.html -->
 {% load static %}
-{% load socialaccount %}
-<!DOCTYPE html>
-<html>
+<html class="no-js" lang="en">
 
 <head>
     <meta charset="utf-8">
-    <title>{% block title %}E-Commerce{% endblock title %}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>E-Commerce - {% block title %} {% endblock title %}</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'img/favicon.png' %}">
+
+    <!-- all css here -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animate.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/slinky.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/slick.css' %}">
+    <link rel="stylesheet" href="{% static 'css/ionicons.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bundle.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+    <link rel="stylesheet" href="{% static 'css/normalize.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/global.css' %}" />
 </head>
 
 <body>
-    <header>
-        <!-- Fixed navbar -->
-        <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4\
-     mb-3 bg-white border-bottom shadow-sm">
-            <a href="{% url 'home' %}" class="navbar-brand my-0 mr-md-auto font-weight-normal">E-Commerce</a>
-            <nav class="my-2 my-md-0 mr-md-3">
-                {% comment %} <a class="p-2 text-dark" href="{% url 'book_list' %}">Books</a>
-                <a class="p-2 text-dark" href="{% url 'about' %}">About</a> {% endcomment %}
-                {% if user.is_authenticated %}
-                <a class="p-2 text-dark" href="{% url 'logout' %}">Log Out</a>
-                {% else %}
-                <a class="p-2 text-dark" href="{% url 'login' %}">Log In</a>
-                {% comment %} <a href="{% provider_login_url "facebook" %}"
-                    class="m-1 btn btn-social btn-facebook text-white"
-                    style="background-color:#3b5998;text-align:center">
-                    Facebook
-                </a> {% endcomment %}
-                <a class="m-1 btn btn-outline-primary" href="{% url 'signup' customer %}">Sign Up</a>
-                <a class="m-1 btn btn-outline-primary" href="{% url 'signup' vendor %}">Sign Up as Vendor</a>
-                {% endif %}
-            </nav>
+    <!-- header start -->
+    <div class="wrapper">
+        <header class="pl-155 pr-155 intelligent-header">
+            <div class="header-area header-area-2">
+                <div class="container-fluid p-0">
+                    <div class="row no-gutters">
+                        <div class="col-lg-3 col-md-6 col-6">
+                            <div class="logo">
+                                <a href={% url 'home'  %}><img src=" {% static 'img/logo/logo.png' %}" alt="" /></a>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 menu-none-block menu-center">
+                            <div class="main-menu">
+                                <nav>
+                                    <ul>
+                                        <li><a href={% url 'home'  %}>home</a></li>
+                                        <li><a href="about-us.html">about us</a></li>
+                                        <li><a href={% url 'products:product_list' %}>shop</a></li>
+                                        <li><a href={% url 'orders:order_track' %}>Order Tracking</a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-6">
+                            <div class="header-search-cart">
+                                <div class="header-search common-style">
+                                    <button class="sidebar-trigger-search">
+                                        <span class="ion-ios-search-strong"></span>
+                                    </button>
+                                </div>
+                                <div class="header-cart common-style">
+                                    <button class="sidebar-trigger">
+                                        <span class="ion-bag"></span>
+                                    </button>
+                                </div>
+                                <div class="header-sidebar common-style">
+                                    <button class="header-navbar-active">
+                                        <span class="ion-navicon"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <div class="header-space"></div>
+        <!-- header end -->
+        <!-- sidebar-cart start -->
+        <div class="sidebar-cart onepage-sidebar-area">
+            <div class="wrap-sidebar">
+                <div class="sidebar-cart-all">
+                    <div class="sidebar-cart-icon">
+                        <button class="op-sidebar-close"><span class="ion-android-close"></span></button>
+                    </div>
+                    <div class="cart-content">
+                        <h3>Shopping Cart</h3>
+                        <ul>
+                            {% for item in cart %}
+                            {% with item.product as product %}
+                            <li class="single-product-cart">
+                                <div class="cart-img">
+                                    {% with product.album.default.image as src %}
+                                    <a href="{{product.get_absolute_url}}"><img style="width:80;height:80;"
+                                            src="/{{ src }}" alt=""></a>
+                                    {% endwith %}
+                                </div>
+                                <div class="cart-title">
+                                    <h3><a href="#">{{product.title}}</a></h3>
+                                    <span>{{item.quantity}} x ${{item.price}}</span>
+                                </div>
+                                <div class="cart-delete">
+                                    <a href="{% url "cart:cart_remove" product.id %}"><i
+                                            class="ion-ios-trash-outline"></i></a>
+                                </div>
+                            </li>
+                            <li class="single-product-cart">
+                                <div class="cart-total">
+                                    <h4>Total : <span>$ {{cart.get_total_price}}</span></h4>
+                                </div>
+                            </li>
+                            <li class="single-product-cart">
+                                <div class="cart-checkout-btn">
+                                    <a class="btn-hover cart-btn-style" href="{% url 'cart:cart_detail' %}">view
+                                        cart</a>
+                                    {% if cart|length > 0 %}
+                                    <a class="no-mrg btn-hover cart-btn-style"
+                                        href="{% url 'orders:checkout' %}">checkout</a>
+                                    {% endif %}
+                                </div>
+                            </li>
+                            {% endwith %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
-    </header>
+        <!-- main-search start -->
+        <div class="main-search-active">
+            <div class="sidebar-search-icon">
+                <button class="search-close"><span class="ion-android-close"></span></button>
+            </div>
+            <div class="sidebar-search-input">
+                <form>
+                    <div class="form-search">
+                        <input id="search" class="input-text" value="" placeholder="Search Entire Store" type="search">
+                        <button>
+                            <i class="ion-ios-search-strong"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- main-search start -->
+        <div class="cur-lang-acc-active">
+            <div class="wrap-sidebar">
+                <div class="sidebar-nav-icon">
+                    <button class="op-sidebar-close"><span class="ion-android-close"></span></button>
+                </div>
+                <div class="single-currency-language-account">
+                    <div class="cur-lang-acc-title">
+                        <h4>My Account:</h4>
+                    </div>
+                    <div class="cur-lang-acc-dropdown">
+                        <ul>
+                            {% if user.is_authenticated %}
+                            {% if user.is_vendor %}
+                            <a href={% url 'users:vendorprofile_detail' pk=user.vendorprofile.id %}>My Vendor
+                                Dashboard</a>
+                            {% else %}
+                            <a href={% url 'users:customerprofile_detail' pk=user.customerprofile.id %}>My Customer
+                                Dashboard</a>
+                            {% endif %}
+                            <li><a href={% url 'users:logout' %}>Log Out</a></li>
+                            {% else %}
+                            <li><a href={% url 'users:login' %}>Log In</a> </li>
+                            <li><a href={% url 'users:signup'%}?user_type=customer>Sign Up as a Customer</a></li>
+                            <li><a href={% url 'users:signup'%}?user_type=vendor>Sign Up as a Vendor</a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="container">
         {% block content %}
         {% endblock content %}
     </div>
-    <!-- JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
-    </script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
-    </script>
+    <footer class="footer-area gray-bg pt-100 pb-95">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-5 col-12">
+                    <div class="footer-widget">
+                        <div class="footer-widget-l-content">
+                            <h4>Years of Experience</h4>
+                            <ul>
+                                <li><a href="#"><i class="ion-social-twitter"></i></a></li>
+                                <li><a href="#"><i class="ion-social-tumblr"></i></a></li>
+                                <li><a href="#"><i class="ion-social-facebook"></i></a></li>
+                                <li><a href="#"><i class="ion-social-instagram-outline"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-7 col-12">
+                    <div class="footer-widget">
+                        <div class="footer-widget-m-content text-center">
+                            <div class="footer-logo">
+                                <a href="#"><img src="{% static 'img/logo/logo.png' %}" alt=""></a>
+                            </div>
+                            <div class="footer-nav">
+                                <nav>
+                                    <ul>
+                                        <li><a href="#">home</a></li>
+                                        <li><a href="#">about us</a></li>
+                                        <li><a href="#">shop</a></li>
+                                        <li><a href="#">blog</a></li>
+                                        <li><a href="#">pages</a></li>
+                                    </ul>
+                                </nav>
+                            </div>
+                            <p>Copyright <i class="fa fa-copyright"></i> 2020 <a href="https://freethemescloud.com/"
+                                    target="_blank">Free Themes Cloud.</a> All rights reserved. </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-12 col-12">
+                    <div class="footer-widget f-right">
+                        <div class="footer-widget-r-content">
+                            <ul>
+                                <li><span>Phone :</span> +020 112 2016 6578</li>
+                                <li><span>Email : </span> <a href="#">moh.ayman3600@gmail.com</a></li>
+                                <li><span>Address :</span> Cairo, Egypt</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    {% block modal %}
+    {% endblock modal %}
+    <!-- all js here -->
+    <script src="{% static 'js/vendor/modernizr-2.8.3.min.js' %}"></script>
+    <script src="{% static 'js/vendor/jquery-1.12.0.min.js' %}"></script>
+    <script src="{% static 'js/popper.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
+    <script src="{% static 'js/isotope.pkgd.min.js' %}"></script>
+    <script src="{% static 'js/imagesloaded.pkgd.min.js' %}"></script>
+    <script src="{% static 'js/jquery.counterup.min.js' %}"></script>
+    <script src="{% static 'js/waypoints.min.js' %}"></script>
+    <script src="{% static 'js/slinky.min.js' %}"></script>
+    <script src="{% static 'js/ajax-mail.js' %}"></script>
+    <script src="{% static 'js/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'js/plugins.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    <!-- Stripe javascript -->
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="{% static 'js/stripe.js' %}"></script>
 </body>
 
 </html>

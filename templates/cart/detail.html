@@ -1,0 +1,114 @@
+<!--templates/cart.html-->
+
+{% extends '_base.html' %}
+
+{% block title %}
+Cart
+{% endblock title %}
+
+{% load static %}
+
+{% block content %}
+<div class="breadcrumb-area pt-205 pb-210" style="background-image: url({% static 'img/bg/breadcrumb.jpg' %})">
+    <div class="container">
+        <div class="breadcrumb-content">
+            <h2>cart page</h2>
+            <ul>
+                <li><a href="#">home</a></li>
+                <li> cart </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- shopping-cart-area start -->
+<div class="cart-main-area pt-95 pb-100">
+    <div class="container">
+        {% if cart|length == 0 %}
+        <div class="row">
+            <div class="col text-center">
+                <h3>Cart is empty!</h3>
+            </div>
+        </div>
+        {% else %}
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <h1 class="cart-heading">Cart</h1>
+
+                <div class="table-content table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="product-name">remove</th>
+                                <th class="product-price">images</th>
+                                <th class="product-name">Product</th>
+                                <th class="product-price">Price</th>
+                                <th class="product-quantity">Quantity</th>
+                                <th class="product-subtotal">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in cart %}
+                            {% with item.product as product %}
+                            <tr>
+                                <td class="product-remove"><a href="{% url "cart:cart_remove" product.id %}"><i
+                                            class="ion-android-close"></i></a></td>
+                                <td class="product-thumbnail">
+                                    {% with product.album.default.image as src %}
+                                    <a href="{{product.get_absolute_url}}"><img style="width:100;height:100;"
+                                            src="/{{ src }}" alt=""></a>
+                                    {% endwith %}
+                                </td>
+                                <td class="product-name"><a href="#">{{ product.title }} </a></td>
+                                <td class="product-price"><span class="amount">${{ item.price }}</span></td>
+                                <td class="product-quantity">
+                                    <form id="update_form" action="{% url "cart:cart_add" product.id %}" method="post">
+                                        {% csrf_token %}
+                                        <input value="{{ item.update_quantity_form.quantity.value }}"
+                                            name="{{ item.update_quantity_form.quantity.name  }}" type="number">
+                                        {{ item.update_quantity_form.update }}
+                                    </form>
+                                </td>
+                                {% endwith %}
+                                <td class="product-subtotal">${{ item.total_price }}</td>
+                                {% endfor %}
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="coupon-all">
+                            <div class="coupon">
+                                <input id="coupon_code" class="input-text" name="coupon_code" value=""
+                                    placeholder="Coupon code" type="text">
+                                <input class="button" name="apply_coupon" value="Apply coupon" type="submit">
+                            </div>
+                            <div class="coupon2">
+                                <input class="button" name="update_cart" value="Update cart" form="update_form"
+                                    type="submit">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-5 ml-auto">
+                        <div class="cart-page-total">
+                            <h2>Cart totals</h2>
+                            <ul>
+                                <li>Subtotal<span>{{cart.get_total_price}}</span></li>
+                                <li>Total<span>{{cart.get_total_price}}</span></li>
+                            </ul>
+                            {% if cart|length > 0 %}
+                            <a href="{% url 'orders:checkout' %}">Proceed to checkout</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+<!-- shopping-cart-area end -->
+{% endblock content %}

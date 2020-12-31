@@ -1,0 +1,15 @@
+<!-- templates/home.html -->
+{% extends "_base.html" %}
+
+{% load static %}
+
+{% block title %}
+ERROR
+{% endblock title %}
+
+{% block content %}
+<h1 class="text-center text-warning">ERROR: {{ view.kwargs.error_name }}</h1>
+
+<h3 class="text-center">{% autoescape off %} {{ view.kwargs.error_msg }} {% endautoescape %}</h3>
+
+{% endblock content %}

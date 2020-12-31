@@ -1,0 +1,164 @@
+<!--templates/product_list.html-->
+
+{% extends '_base.html' %}
+
+{% load static %}
+
+{% block title %}
+Shop:{{category.name}}
+{% endblock title %}
+
+{% block content %}
+
+<div class="breadcrumb-area pt-205 pb-210 bg-img" style="background-image: url({% static 'img/bg/breadcrumb.jpg' %}%)">
+    <div class="container">
+        <div class="breadcrumb-content">
+            <h2>shop:{{category.name}}</h2>
+            <ul>
+                <li><a href="#">home</a></li>
+                <li> shop:{{category.name}} </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="shop-page-wrapper hidden-items padding-filter">
+    <div class="container-fluid">
+        <div class="shop-product-content tab-content">
+            <div id="grid-5-col1" class="tab-pane fade active show">
+                <div class="row custom-row">
+                    {% for product in category.products.all %}
+                    <div class="custom-col-5 custom-col-style">
+                        <div class="single-product mb-35">
+                            <div class="product-img">
+                                {% with product.album.default.image as src %}
+                                <a href="{{product.get_absolute_url}}"><img src="/{{ src }}" alt=""></a>
+                                {% endwith %}
+                                <div class="product-action">
+                                    <a title="Quick View" data-toggle="modal" data-target="#product{{forloop.counter}}"
+                                        class="animate-right" href="#"><i class="ion-ios-eye-outline"></i></a>
+                                </div>
+                            </div>
+                            <div class="product-content">
+                                <div class="product-title-price">
+                                    <div class="product-title">
+                                        <h4><a href={{product.get_absolute_url}}>{{product.title}}</a></h4>
+                                    </div>
+                                    <div class="product-price">
+                                        <span>${{product.price}}</span>
+                                    </div>
+                                </div>
+                                <div class="product-cart-categori">
+                                    <div class="product-cart">
+                                        <span>{{product.category.all|join:', '}}</span>
+                                    </div>
+                                    <div class="product-categori">
+                                        <form id="add-to-cart-form" action="{% url "cart:cart_add" product.id %}"
+                                            method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="{{ cart_add_form.quantity.name }}"
+                                                value="{{ cart_add_form.quantity.value }}" />
+                                            {{ cart_add_form.update }}
+                                            <a href="javascript:document.getElementById('add-to-cart-form').submit();"><i
+                                                    class="ion-bag"></i> Add to cart</a>
+                                            <noscript>
+                                                <input type="submit" value="ADD TO CART" />
+                                            </noscript>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block modal %}
+<!-- modal -->
+{% for product in category.products.all %}
+<div class="modal fade" id="product{{forloop.counter}}" tabindex="-1" role="dialog" aria-hidden="true">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span class="ion-android-close" aria-hidden="true"></span>
+    </button>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="qwick-view-left">
+                    <div class="quick-view-learg-img">
+                        <div class="quick-view-tab-content tab-content">
+                            {% for image in product.album.images.all %}
+                            {% if forloop.counter == 1 %}
+                            <div class="tab-pane active show fade" id="modal{{forloop.counter}}" role="tabpanel">
+                                <img style="width:320;height:380;" src="/{{product.album.default.image }}" alt="">
+                            </div>
+                            {% else %}
+                            <div class="tab-pane fade" id="modal{{forloop.counter}}" role="tabpanel">
+                                <img style="width:320;height:380;" src="/{{ image.image }}" alt="">
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="quick-view-list nav" role="tablist">
+                        {% for image in product.album.images.all %}
+                        {% if forloop.counter == 1 %}
+                        <a class="active" href="#modal{{forloop.counter}}" data-toggle="tab" role="tab"
+                            aria-selected="true" aria-controls="home1">
+                            <img style="width:100;height:100;" src="/{{ product.album.default.image }}" alt="">
+                        </a>
+                        {% else %}
+                        <a href="#modal{{forloop.counter}}" data-toggle="tab" role="tab" aria-selected="false"
+                            aria-controls="home2">
+                            <img style="width:100;height:100;" src="/{{ image.image }}" alt="">
+                        </a>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="qwick-view-right">
+                    <div class="qwick-view-content">
+                        <h3>{{product.title}}</h3>
+                        <div class="price">
+                            <span class="new">$90.00</span>
+                            <span class="old">{{product.price}} </span>
+                        </div>
+                        <div class="rating-number">
+                            <div class="quick-view-rating">
+                                <i class="ion-ios-star red-star"></i>
+                                <i class="ion-ios-star red-star"></i>
+                                <i class="ion-android-star-outline"></i>
+                                <i class="ion-android-star-outline"></i>
+                                <i class="ion-android-star-outline"></i>
+                            </div>
+                            <div class="quick-view-number">
+                                <span>2 Ratting (S)</span>
+                            </div>
+                        </div>
+                        <p>{{product.desc}}</p>
+                        <form id="add-to-cart-form-modal" action="{% url "cart:cart_add" product.id %}" method="post">
+                            <div class="quickview-plus-minus">
+                                <div class="cart-plus-minus">
+                                    {{cart_add_form}}
+                                </div>
+                                <div class="quickview-btn-cart">
+                                    {% csrf_token %}
+                                    <a href="javascript:document.getElementById('add-to-cart-form-modal').submit();"><i
+                                            class="ion-bag"></i> Add to cart</a>
+                                    <noscript>
+                                        <input type="submit" value="ADD TO CART" />
+                                    </noscript>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock modal %}

@@ -1,20 +1,22 @@
 <!-- templates/account/login.html -->
 {% extends "_base.html" %}
 
+{% load static %}
+
 {% load i18n %}
 
 {% block title %}
-Log In
+Add Product
 {% endblock title %}
 
 {% block content %}
-<div class="breadcrumb-area pt-205 pb-210" style="background-image: url(assets/img/bg/breadcrumb.jpg)">
+<div class="breadcrumb-area pt-205 pb-210" style="background-image: url({% static 'img/bg/breadcrumb.jpg' %})">
     <div class="container">
         <div class="breadcrumb-content">
-            <h2>login</h2>
+            <h2>Add New Product</h2>
             <ul>
                 <li><a href="#">home</a></li>
-                <li> login </li>
+                <li> add product </li>
             </ul>
         </div>
     </div>
@@ -27,18 +29,13 @@ Log In
                 <div class="login">
                     <div class="login-form-container">
                         <div class="login-form">
-                            <form action="#" method="post">
+                            <form method="post" enctype="multipart/form-data">
                                 {% csrf_token %}
-                                {{ form }}
-                                <input type="hidden" name="next" value="{{ request.GET.next }}">
+                                {{ forms.product.as_p  }}
+                                {{ forms.album.as_p }}
+                                {% comment %} <input type="file" name="images" multiple> {% endcomment %}
                                 <div class="button-box">
-                                    <div class="login-toggle-btn">
-                                        <input type="checkbox">
-                                        <label>Remember me</label>
-                                        <a class="button secondaryAction"
-                                            href="{% url 'users:password_reset' %}">{% trans "Forgot Password?" %}</a>
-                                    </div>
-                                    <button type="submit" class="default-btn floatright">Login</button>
+                                    <button type="submit" class="default-btn floatright">Add Product</button>
                                 </div>
                             </form>
                         </div>

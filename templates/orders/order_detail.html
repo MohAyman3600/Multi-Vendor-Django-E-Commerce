@@ -1,0 +1,107 @@
+<!-- templates/order_detail.html -->
+{% extends "_base.html" %}
+
+{% load static %}
+
+{% block title %}
+Order Number #{{order.id}}
+{% endblock title %}
+
+{% block content %}
+<div class="container mb-10">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body p-0">
+                    <div class="row p-5">
+                        <div class="col text-center">
+                            <p class="font-weight-bold mb-1">Invoice #{{order.id}}</p>
+                            <p class="font-weight-bold mb-1">Tracking Code {{order.tracking_code}}</p>
+                            <p class="text-muted">{{order.created}}</p>
+                        </div>
+                    </div>
+
+                    <hr class="my-5">
+
+                    <div class="row pb-5 p-5">
+                        <div class="col-12">
+                            <p class="font-weight-bold mb-4">Client Information</p>
+                            <p class="mb-1"><span class="text-muted">Name:</span>
+                                {{order.billing_details.get_full_name}}</p>
+                            <p class="mb-1"><span class="text-muted">E-mail:</span> {{order.billing_details.email}}</p>
+                            <p><span class="text-muted">Phone:</span> {{order.billing_details.phone}}</p>
+                            <p class="mb-1"><span class="text-muted">Country:</span> {{order.billing_details.city}},
+                                {{order.billing_details.country}}
+                            </p>
+                            <p class="mb-1"><span class="text-muted">Address:</span> {{order.billing_details.address}}
+                            </p>
+                            <p class="mb-1"><span class="text-muted">Post-Code:</span>
+                                {{order.billing_details.postcode}}</p>
+                        </div>
+                    </div>
+                    <div class="row p-5">
+                        <div class="col-md-12">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th class="border-0 text-uppercase small font-weight-bold">ID</th>
+                                        <th class="border-0 text-uppercase small font-weight-bold">Item</th>
+                                        <th class="border-0 text-uppercase small font-weight-bold">Description</th>
+                                        <th class="border-0 text-uppercase small font-weight-bold">Quantity</th>
+                                        <th class="border-0 text-uppercase small font-weight-bold">Unit Cost</th>
+                                        <th class="border-0 text-uppercase small font-weight-bold">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in order.order_product.all  %}
+                                    {% if request.user.is_vendor %}
+                                    {% if request.user.vendorprofile == item.product.vendor %}
+                                    <tr>
+                                        <td>{{item..product.id}}</td>
+                                        <td>{{item.product.title}}</td>
+                                        <td>{{item.product.desc}}</td>
+                                        <td>{{item.product_qty}}</td>
+                                        <td>${{item.purchase_price}}</td>
+                                        <td>${{item.total_price}}</td>
+                                    </tr>
+                                    {% endif %}
+                                    {% else %}
+                                    <tr>
+                                        <td>{{item..product.id}}</td>
+                                        <td>{{item.product.title}}</td>
+                                        <td>{{item.product.desc}}</td>
+                                        <td>{{item.product_qty}}</td>
+                                        <td>${{item.purchase_price}}</td>
+                                        <td>${{item.total_price}}</td>
+                                    </tr>
+                                    {% endif %}
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-row-reverse bg-dark text-white p-4">
+                        <div class="py-3 px-5 text-right">
+                            <div class="mb-2">Grand Total</div>
+                            <div class="h2 font-weight-light">${{order.total_price}}</div>
+                        </div>
+                        <div class="py-3 px-5 text-right">
+                            <div class="mb-2">Sub - Total amount</div>
+                            <div class="h2 font-weight-light">${{order.total_price}}</div>
+                        </div>
+                    </div>
+                    <div class="d-flex  p-4 text-left">
+                        <div class="py-3 px-5">
+                            <p><span class:"text-muted">Order Notes:</span> {{order.billing_details.order_notes}}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
