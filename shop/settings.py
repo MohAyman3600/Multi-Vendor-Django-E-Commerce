@@ -10,7 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
+import os
 from pathlib import Path
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +27,7 @@ SECRET_KEY = 'l9zj6okvjgt!s&im16_-%8fad68n1p8nr*fxk$-c7k28g9*+v9'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['dev.com']
 
 
 # Application definition
@@ -38,9 +40,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # local
+    # Third Party
+
+    # Local
     'users.apps.UsersConfig',
+    'products.apps.ProductsConfig',
+    'orders.apps.OrdersConfig',
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -57,7 +65,7 @@ ROOT_URLCONF = 'shop.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -65,6 +73,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'cart.context_processors.cart',
             ],
         },
     },
@@ -121,10 +130,32 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+STATICFILES_FINDERS = [
+    "django.contrib.staticfiles.finders.FileSystemFinder",
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+]
 
 
 #################################################
 
 
 AUTH_USER_MODEL = "users.User"
+USERTYPE_VENDOR = 'vendor'
+USERTYPE_CUSTOMER = 'customer'
 LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'
+
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'email_sent')
+
+
+CART_SESSION_ID = 'cart'
+
+
+STRIPE_PUBLISHABLE_KEY = 'pk_test_51HlesSEkjtz6AvApQqSf0S0qvRgjeAkpUsHpA7HSxG2HabmG2nfsuGalU6PAcmiL1BM2lQfkA28UW0ZHIaRseobX00215yJlL1'
+STRIPE_SECRET_KEY = 'sk_test_51HlesSEkjtz6AvApb48FsqRx1OVmtjIWFm5ovTash8oe5thwltqbdWbIPAHI1UbPEh2OIkowpqzPYqJQZ87iIDov00c6v4ZbQl'
+
+PLATFORM_FEE_PERCENTAGE = 0.1
