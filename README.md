@@ -4,7 +4,8 @@ Multi-Vendor Django E-Commerce Website with Stripe Support.
 
 ## Description
 
-An e-commerce website built using the Django Framework. The website has vendor and customer user profile types with ability to extend to other profile types; different permissions are set bsded on the profile type. Moreover, the webiste has cart app that works using session variables. Also, there is an orders app that uses Stripe for proccessing payments. The wesite templates was built by customizing free HTML temaplate from [@neha](neha@gmail.com), using Django template language. Tests are only set up for the users app, and checked using coverage package.
+An e-commerce website built using the Django Framework. The website has vendor and customer user profile types with the ability to extend to other profile types; different permissions are set based on the profile type. Moreover, the website has a cart app that works using session variables. Also, there is the app of an order that uses Stripe for processing payments. The website templates were built by customizing free HTML templates from @neha, using Django template language. Tests are only set up for the users' app and checked using the coverage package.
+
 
 ## C4 Model Design Diagram
 
