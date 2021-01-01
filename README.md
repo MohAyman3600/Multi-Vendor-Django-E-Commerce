@@ -8,7 +8,11 @@ An e-commerce website built using the Django Framework. The website has vendor a
 
 ## C4 Model Design Diagram
 
-![scraper UML](https://github.com/MohAyman3600/Multi-Vendor-Django-E-Commerce/blob/master/C4_model_arch/structurizr-59568-Marketplace-key.png)
+![marketplace](https://github.com/MohAyman3600/Multi-Vendor-Django-E-Commerce/blob/master/C4_model_arch/structurizr-59568-Marketplace.png)
+
+![project-apps](https://github.com/MohAyman3600/Multi-Vendor-Django-E-Commerce/blob/master/C4_model_arch/structurizr-59568-projectApps.png)
+
+![mainflow](https://github.com/MohAyman3600/Multi-Vendor-Django-E-Commerce/blob/master/C4_model_arch/structurizr-59568-mainFlow.png)
 
 
 ## Getting Started
