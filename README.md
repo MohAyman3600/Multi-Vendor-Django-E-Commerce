@@ -44,7 +44,7 @@ python manage.py makemigrations api
 
 ## Authors
 
-[@Mohamed Ayman](https://www.linkedin.com/in/mohamed-ayman-311628141/)
+[@Mohamed Ayman](https://www.linkedin.com/in/mohayman3600/)
 
 
 ## Version History
